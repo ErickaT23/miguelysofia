@@ -116,7 +116,8 @@ h1, h2, h3,
 .dresscode-text,
 .media-share-text,
 .wishes-text,
-.rsvp-intro {
+.rsvp-intro,
+ #rsvp-final-message {
     font-family: var(--font-display);
 }
 
@@ -672,10 +673,56 @@ button {
 
 .gifts-style-section #rsvp-name {
     box-shadow: 0 4px 12px rgba(6, 59, 44, 0.08) !important;
+    background: linear-gradient(115deg, #063b2c 0%, #0b523d 24%, #4a9a78 43%, #12382d 55%, #2f8065 74%, #063b2c 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.names-text,
+.blessing-title,
+.blessing-parents strong,
+.event-time,
+.event-lugar,
+.event-direccion,
+.gifts-text,
+.dresscode-text,
+.media-share-text,
+.wishes-text,
+.playlist-text,
+.rsvp-intro,
+#rsvp-final-message {
+    font-family: var(--font-editorial) !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.8 !important;
+    background: linear-gradient(115deg, #063b2c 0%, #0b523d 24%, #4a9a78 43%, #12382d 55%, #2f8065 74%, #063b2c 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
 .gifts-style-section .rsvp-radio-option {
     box-shadow: 0 4px 12px rgba(6, 59, 44, 0.08) !important;
+}
+
+.portada-boton,
+.btn-calendar,
+.btn-location,
+.btn-dresscode,
+.btn-media-share,
+.btn-wish-toggle,
+.btn-wish-submit,
+.btn-gift,
+.btn-playlist,
+.rsvp-popup-close {
+    min-height: 22px !important;
+    min-width: 0 !important;
+    width: auto !important;
+    padding: 0.38rem 0.95rem !important;
+    font-size: 0.5rem !important;
+    letter-spacing: 0.08em !important;
 }
 
 .countdown-section {
@@ -4118,7 +4165,6 @@ lord-icon {
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
-    text-shadow: 0 0 0.5px rgba(23, 47, 88, 0.55);
 }
 
 .section-title-simple,
@@ -4154,8 +4200,8 @@ lord-icon {
 }
 
 .rsvp-response-group input[type="radio"] {
-    border: 1px solid midnightblue !important;
-    accent-color: midnightblue;
+    border: 1px solid var(--color-corinto) !important;
+    accent-color: var(--color-corinto);
 }
 
 #guest-count-wrapper > label {
