@@ -33,7 +33,7 @@
             window.config
             && window.config.event
             && window.config.event.defaultEventId
-            || "renato-julie-2026"
+            || "miguel-sofia-2026"
         ).trim();
 
         return queryEventId || defaultEventId;

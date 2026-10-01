@@ -9,7 +9,7 @@ const guestDirectorySeed = {
 };
 
 const guestDirectoriesByEvent = {
-    "renato-julie-2026": guestDirectorySeed
+    "miguel-sofia-2026": guestDirectorySeed
 };
 
 window.LocalGuestSeeds = {
@@ -23,7 +23,7 @@ function resolveDashboardEventContext() {
     const externalConfig = window.config || {};
     const eventConfig = externalConfig.event || {};
     const eventIdParam = String(eventConfig.eventIdParam || "eventId").trim() || "eventId";
-    const defaultEventId = String(eventConfig.defaultEventId || "renato-julie-2026").trim() || "renato-julie-2026";
+    const defaultEventId = String(eventConfig.defaultEventId || "miguel-sofia-2026").trim() || "miguel-sofia-2026";
     const params = new URLSearchParams(window.location.search || "");
     const fromQuery = String(params.get(eventIdParam) || "").trim();
     const fromWindow = String(

@@ -1518,8 +1518,8 @@ button {
 .countdown-fondo {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #050B1C 0%, #101F3D 50%, #00008B 100%);
-    background-color: #050B1C;
+    background: linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
+    background-color: #063b2c;
 }
 
 .countdown-overlay {
@@ -3627,7 +3627,7 @@ button {
 
 .btn-calendar:hover {
     color: #FFFFFF;
-    background: linear-gradient(115deg, #00008B 0%, rgb(35, 64, 111) 100%);
+    background: var(--gradient-corinto);
     border: none;
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(5, 11, 28, 0.36);
@@ -3683,7 +3683,7 @@ button {
 .gifts-section {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #050B1C 0%, #101F3D 50%, #00008B 100%);
+    background: linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
 }
 
 .gifts-fondo {
@@ -3759,7 +3759,7 @@ button {
 .btn-calendar,
 .btn-gift,
 .btn-wish-submit {
-    color: #172F58;
+    color: var(--color-corinto);
 }
 
 .event-card {
@@ -4093,7 +4093,7 @@ lord-icon {
 .rsvp-section {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #050B1C 0%, #101F3D 50%, #00005A 100%);
+    background: linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
 }
 
 .no-children-section .section-inner,
@@ -4173,7 +4173,7 @@ lord-icon {
     font-size: 0.65rem !important;
     font-weight: 400 !important;
     letter-spacing: 0.15em !important;
-    color: #172F58 !important;
+    color: var(--color-corinto) !important;
     background: rgba(255, 255, 255, 0.12);
     border: none;
     box-shadow: 0 8px 24px rgba(5, 11, 28, 0.16);
@@ -4443,7 +4443,7 @@ lord-icon {
 
 @media (max-width: 767px) {
     .wishes-section {
-        background: linear-gradient(135deg, #050B1C 0%, #101F3D 50%, #00005A 100%);
+        background: linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
     }
 }
 
