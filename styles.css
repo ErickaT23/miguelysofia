@@ -593,12 +593,8 @@ button {
     background: #ffffff;
 }
 
-.dresscode-swatch-gold {
-    background: var(--gradient-beige-elegante);
-}
-
-.dresscode-swatch-green {
-    background: linear-gradient(115deg, #063b2c 0%, #0b523d 24%, #4a9a78 43%, #12382d 55%, #2f8065 74%, #063b2c 100%);
+.dresscode-swatch-rose-gold {
+    background: linear-gradient(135deg, #f4d6c7 0%, #c98f7b 48%, #f0c1ad 100%);
 }
 
 .dresscode-palette-label {
@@ -1847,7 +1843,7 @@ button {
             transparent 1px,
             transparent 8px
         ),
-        linear-gradient(135deg, #5C3A3A 0%, #7A4A4A 50%, #4A2C2C 100%);
+        linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
 }
 
 .agenda-panel {
@@ -1875,10 +1871,10 @@ button {
     z-index: 1;
     margin-bottom: clamp(1.6rem, 4vw, 2.2rem);
     line-height: 1;
-    background: var(--gradient-corinto);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    font-weight: 400;
+    color: var(--color-corinto);
 }
 
 .itinerary-inicial {
@@ -1914,20 +1910,21 @@ button {
 }
 
 .itinerary-time {
-    font-family: var(--font-display);
-    font-size: 0.96rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
     font-weight: 400;
-    font-style: italic;
-    color: rgba(44, 36, 36, 0.86);
-    letter-spacing: 0.075em;
-    line-height: 1.15;
+    font-style: normal;
+    color: var(--color-black);
+    letter-spacing: normal;
+    line-height: 1.4;
     margin-top: 0;
     text-align: center;
 }
 
 .itinerary-name {
-    font-size: 1.56rem;
-    line-height: 1.14;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.4;
     font-weight: 400;
     color: var(--color-black);
     text-align: center;
@@ -1946,11 +1943,15 @@ button {
 }
 
 .itinerary-divider {
-    font-family: var(--font-editorial);
-    font-size: 0.86rem;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
     font-weight: 400;
     line-height: 0.9;
-    color: rgba(92, 58, 58, 0.42);
+    color: var(--gradient-beige-elegante);
+    background: var(--gradient-beige-elegante);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin: 0.26rem 0;
     text-align: center;
 }
@@ -1972,7 +1973,7 @@ button {
                 transparent 1px,
                 transparent 7px
             ),
-            linear-gradient(135deg, #5C3A3A 0%, #7A4A4A 50%, #4A2C2C 100%);
+            linear-gradient(135deg, #063b2c 0%, #0b523d 50%, #2f8065 100%);
     }
 
     .agenda-panel {
@@ -1999,6 +2000,20 @@ button {
     display: block;
     width: 100%;
     height: auto;
+}
+
+.video-separator-section {
+    padding: 0;
+    overflow: hidden;
+}
+
+.video-separator {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: cover;
+    background: var(--color-black);
 }
 
 /* ==================== DRESS CODE ==================== */
@@ -3838,11 +3853,12 @@ lord-icon {
 }
 
 .itinerary-time {
-    font-size: calc(0.96rem + var(--font-bump-base));
+    font-size: calc(0.9rem + var(--font-bump-base));
 }
 
 .itinerary-name {
-    font-size: calc(1.56rem + var(--font-bump-base));
+    font-family: var(--font-editorial) !important;
+    font-size: calc(0.9rem + var(--font-bump-base));
 }
 
 .dresscode-text {
@@ -4246,12 +4262,29 @@ lord-icon {
 .media-share-title,
 .wishes-title,
 .section-title-simple,
+.itinerary-title,
 .rsvp-title {
     font-family: var(--font-display) !important;
     font-size: 22px !important;
     font-weight: 400 !important;
     font-style: normal !important;
     line-height: 1.25 !important;
+}
+
+.itinerary-title {
+    background: var(--gradient-beige-elegante) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.itinerary-name,
+.itinerary-time {
+    font-family: var(--font-editorial) !important;
+    background: var(--gradient-corinto) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
 .invitado-mensaje,
