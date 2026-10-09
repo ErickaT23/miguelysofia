@@ -96,8 +96,8 @@ function createSiteConfig(remoteConfig) {
                 hora: '3:00 PM',
                 direccion: 'Av. Libertador 1234, San Jose',
                 ubicacionUrl: 'https://maps.google.com/?q=Capilla+San+Jose+Obrero',
-                ...(localEvento.ceremonia || {}),
-                ...(remoteEvento.ceremonia || {})
+                ...(remoteEvento.ceremonia || {}),
+                ...(localEvento.ceremonia || {})
             },
             recepcion: {
                 titulo: 'Recepcion',
@@ -207,8 +207,7 @@ function applySiteConfig() {
     const invitadoMensaje = document.querySelector('.invitado-mensaje');
     if (invitadoMensaje) invitadoMensaje.textContent = SiteConfig.textos.mensajeInvitado;
 
-    applyEventCard('.events-container .event-card:nth-child(1)', SiteConfig.evento.ceremonia);
-    applyEventCard('.events-container .event-card:nth-child(2)', SiteConfig.evento.recepcion);
+    applyEventCard('.events-container .event-card:nth-child(2)', SiteConfig.evento.ceremonia);
     applyFooterConfig();
 }
 

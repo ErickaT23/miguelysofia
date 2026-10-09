@@ -31,7 +31,7 @@ const config = {
         ceremonia: {
             titulo: "Ceremonia",
             lugar: "Jardines de San Francisco, Antigua Guatemala",
-            hora: "15:00",
+            hora: "15:30",
             direccion: "Antigua Guatemala",
             ubicacionUrl: "https://waze.com/ul/h9fx6xphhz"
         },
