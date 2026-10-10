@@ -85,7 +85,7 @@ function createSiteConfig(remoteConfig) {
         },
         musica: {
             titulo: 'Nuestra Cancion',
-            archivo: 'audio/nuestra-cancion.mp3?v=20261009-iphone-cache',
+            archivo: 'audio/nuestra-cancion.mp3?v=20261009-app-button',
             ...externalConfig.musica,
             ...normalizedRemoteConfig.musica
         },
