@@ -2754,11 +2754,13 @@ button {
     min-width: 180px;
 }
 
+.gift-app-link-wrap {
+    margin-top: 0.55rem;
+}
+
 .btn-app-link {
-    display: flex;
-    width: fit-content;
+    display: inline-flex;
     min-width: 180px;
-    margin: 0.55rem auto 0;
     text-decoration: none;
 }
 
