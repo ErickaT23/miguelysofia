@@ -1,15 +1,15 @@
 :root {
-    --color-corinto: #8b4d4d;
-    --color-corinto-dark: #633636;
-    --color-corinto-soft: #a97878;
-    --color-beige: #e8d5cd;
-    --color-beige-soft: #f6efea;
-    --color-cream: #fffdfa;
-    --color-ink: #2c2424;
-    --color-muted: #756666;
-    --color-border: rgba(107, 61, 61, 0.18);
-    --shadow-card: 0 16px 42px rgba(44, 36, 36, 0.09);
-    --shadow-soft: 0 10px 24px rgba(44, 36, 36, 0.06);
+    --color-corinto: #0b523d;
+    --color-corinto-dark: #06402f;
+    --color-corinto-soft: #6f9b88;
+    --color-beige: #ffffff;
+    --color-beige-soft: #f7fbf9;
+    --color-cream: #fffdf7;
+    --color-ink: #173b2e;
+    --color-muted: #55756a;
+    --color-border: rgba(11, 82, 61, 0.18);
+    --shadow-card: 0 16px 42px rgba(11, 82, 61, 0.09);
+    --shadow-soft: 0 10px 24px rgba(11, 82, 61, 0.06);
 
     --font-display: "Cormorant", Georgia, serif;
     --font-editorial: "Libre Baskerville", Georgia, serif;
@@ -533,7 +533,7 @@ body {
 }
 
 .confirmation-card-id-inline {
-    color: rgba(107, 61, 61, 0.76);
+    color: rgba(65, 105, 89, 0.72);
     font-size: 0.76rem;
     font-weight: 500;
     letter-spacing: 0.06em;
@@ -744,4 +744,23 @@ body {
     .confirmation-card-line {
         font-size: 0.78rem;
     }
+}
+
+/* Paleta de la invitacion: verde bosque, dorado y crema. */
+body { color: #123d30; background: #f7fbf9; }
+.dashboard-header, .summary-card, .dashboard-table-panel, .confirmation-card { background: #ffffff; border-color: rgba(11, 82, 61, 0.2); }
+.dashboard-header h1, .table-panel-header h2, .summary-value, .confirmation-card-name, .dashboard-kicker { color: #0b523d; }
+.dashboard-header::after, .summary-card::before { background: #0b523d; }
+.summary-card-highlight, .table-export-btn { background: #0b523d; border-color: #0b523d; color: #ffffff; }
+.table-clear-btn, .filter-chip, .table-search-input { color: #0b523d; background: #ffffff; border-color: rgba(11, 82, 61, 0.3); }
+.table-clear-btn:hover, .filter-chip:hover, .filter-chip.is-active { color: #0b523d; background: #ffffff; border-color: #0b523d; box-shadow: inset 0 0 0 1px #0b523d; }
+.table-export-btn:hover { background: #06402f; }
+.confirmation-table th, .confirmation-card-header { color: #0b523d; background: #f7fbf9; }
+.status-badge, .dashboard-event-current, .table-panel-header p, .summary-label, .dashboard-subtitle { color: #55756a; }
+.status-badge.status-yes { color: #0b523d; background: #edf8f2; border-color: #8bc8ae; }
+.status-badge.status-no, .status-badge.status-pending { color: #0b523d; background: #ffffff; border-color: #b9d9cb; }
+.status-badge--pendiente {
+    background: rgba(231, 244, 238, 0.72);
+    border-color: rgba(126, 177, 155, 0.42);
+    color: rgba(35, 100, 76, 0.9);
 }

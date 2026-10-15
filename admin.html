@@ -6,24 +6,24 @@
     <title>Panel Admin RSVP</title>
     <style>
         :root {
-            --bg: #ffffff;
-            --surface: #ffffff;
-            --surface-soft: #fbf9fc;
-            --text: #111111;
-            --text-soft: #6a6470;
-            --line: #ece7f1;
-            --line-strong: #ddd3e8;
+            --bg: #f5ebd2;
+            --surface: #fffdf7;
+            --surface-soft: #fbf5e6;
+            --text: #0b523d;
+            --text-soft: #5d6d64;
+            --line: #e4d7b8;
+            --line-strong: #c7a45a;
 
-            --brand-purple: #6c2bd9;
-            --brand-orange: #ff7a1a;
-            --brand-rose: #d6a0b5;
-            --brand-mocha: #9b7a67;
+            --brand-purple: #0b523d;
+            --brand-orange: #c7a45a;
+            --brand-rose: #8aa99a;
+            --brand-mocha: #876f3d;
 
-            --danger: #e53935;
-            --danger-dark: #c62828;
+            --danger: #876f3d;
+            --danger-dark: #0b523d;
 
-            --shadow-soft: 0 10px 30px rgba(30, 10, 50, 0.08);
-            --shadow-card: 0 8px 18px rgba(20, 20, 30, 0.06);
+            --shadow-soft: 0 10px 30px rgba(11, 82, 61, 0.12);
+            --shadow-card: 0 8px 18px rgba(11, 82, 61, 0.08);
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 9px;
@@ -61,7 +61,7 @@
         .header {
             padding: 1.4rem 1.4rem 1.1rem;
             border-bottom: 1px solid var(--line);
-            background: linear-gradient(180deg, #ffffff 0%, #fdfbff 100%);
+            background: linear-gradient(180deg, #fffdf7 0%, #f5ebd2 100%);
             text-align: center;
         }
 
@@ -88,8 +88,8 @@
         .subtitle strong {
             color: var(--brand-mocha);
             font-weight: 700;
-            background: #f6efe9;
-            border: 1px solid #e8dbd0;
+            background: #f5ebd2;
+            border: 1px solid #d9c58e;
             border-radius: 999px;
             padding: 0.1rem 0.45rem;
             line-height: 1.2;
@@ -192,9 +192,9 @@
         }
 
         .btn {
-            border: 1px solid #d8c6fb;
-            background: #f5eeff;
-            color: #5f2cc3;
+            border: 1px solid #d9c58e;
+            background: #fbf5e6;
+            color: #0b523d;
             border-radius: 10px;
             padding: 0.6rem 0.9rem;
             cursor: pointer;
@@ -211,15 +211,15 @@
         }
 
         .btn-secondary {
-            background: #fff8de;
-            color: #9a6b00;
+            background: #fbf5e6;
+            color: #876f3d;
             border-color: #efd98f;
             box-shadow: 0 6px 12px rgba(196, 146, 15, 0.16);
         }
 
         .btn-add {
-            background: #fff8de;
-            color: #9a6b00;
+            background: #fbf5e6;
+            color: #876f3d;
             border-color: #efd98f;
             box-shadow: 0 6px 12px rgba(196, 146, 15, 0.16);
         }
@@ -232,9 +232,9 @@
         }
 
         .btn-action {
-            background: #fff2e5;
-            color: #a64a00;
-            border-color: #ffc997;
+            background: #f5ebd2;
+            color: #876f3d;
+            border-color: #c7a45a;
             box-shadow: 0 6px 12px rgba(255, 138, 0, 0.24);
         }
 
@@ -256,7 +256,7 @@
             padding: 0 1.4rem 1.4rem;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            scrollbar-color: #d4c4ee #f4eefb;
+            scrollbar-color: #c7a45a #f5ebd2;
         }
 
         .mobile-confirmations {
@@ -277,7 +277,7 @@
 
         thead th {
             background: linear-gradient(180deg, #f8f5fc 0%, #f2ecf9 100%);
-            color: #2f2442;
+            color: #0b523d;
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -371,14 +371,14 @@
         }
 
         .status-badge--no {
-            background: #feecec;
-            color: #b3261e;
-            border-color: #f2b7b5;
+            background: #e7f0eb;
+            color: #0b523d;
+            border-color: #8aa99a;
         }
 
         .status-badge--pending {
-            background: #fff8de;
-            color: #8e6a00;
+            background: #fbf5e6;
+            color: #876f3d;
             border-color: #efd98f;
         }
 
@@ -398,7 +398,7 @@
         .date-main {
             display: block;
             font-weight: 600;
-            color: #2f2442;
+            color: #0b523d;
             line-height: 1.2;
         }
 
@@ -574,9 +574,9 @@
         }
 
         .btn-mini {
-            border: 1px solid #d8c6fb;
-            background: #f5eeff;
-            color: #5f2cc3;
+            border: 1px solid #d9c58e;
+            background: #fbf5e6;
+            color: #0b523d;
             border-radius: 8px;
             padding: 0.34rem 0.45rem;
             font-size: 0.69rem;
@@ -593,9 +593,9 @@
         }
 
         .btn-mini-primary {
-            border-color: #d8c6fb;
-            background: #f5eeff;
-            color: #5f2cc3;
+            border-color: #d9c58e;
+            background: #fbf5e6;
+            color: #0b523d;
         }
 
         .btn-mini-success {
@@ -610,26 +610,26 @@
         }
 
         .btn-mini-secondary {
-            border-color: #d8c6fb;
-            background: #f5eeff;
-            color: #5f2cc3;
+            border-color: #d9c58e;
+            background: #fbf5e6;
+            color: #0b523d;
         }
 
         .btn-mini-action {
-            border-color: #ffc997;
-            background: #fff2e5;
-            color: #a64a00;
+            border-color: #c7a45a;
+            background: #f5ebd2;
+            color: #876f3d;
         }
 
         .btn-mini-danger {
-            border-color: #f2b7b5;
-            background: #feecec;
-            color: #b3261e;
+            border-color: #8aa99a;
+            background: #e7f0eb;
+            color: #0b523d;
         }
 
         .btn-mini-danger:hover {
             filter: brightness(0.98);
-            background: #fde2e1;
+            background: #d9e8df;
         }
 
         .row-check {
@@ -662,9 +662,9 @@
         }
 
         tbody tr.row-inactive .btn-mini-primary {
-            border-color: #d8c6fb;
-            background: #f5eeff;
-            color: #5f2cc3;
+            border-color: #d9c58e;
+            background: #fbf5e6;
+            color: #0b523d;
         }
 
         tbody tr.row-inactive .btn-mini-primary:hover {
@@ -805,7 +805,7 @@
         }
 
         .guest-card-line strong {
-            color: #2f2442;
+            color: #0b523d;
             font-weight: 600;
         }
 
