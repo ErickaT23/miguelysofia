@@ -3148,6 +3148,16 @@ button {
     font-size: 0.8rem;
 }
 
+.gifts-style-section .rsvp-member-status {
+    font-family: var(--font-editorial);
+    font-size: 15px;
+    line-height: 1.5;
+    background: linear-gradient(115deg, #063b2c 0%, #0b523d 24%, #4a9a78 43%, #d0b66a 55%, #2f8065 74%, #063b2c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .rsvp-member-actions {
     display: flex;
     gap: 0.45rem;

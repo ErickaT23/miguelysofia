@@ -113,8 +113,10 @@ function buildRows(confirmations, guestDirectory) {
             });
             const confirmedMembers = memberRows.filter((member) => member.respuesta === "si");
             const noMembers = memberRows.filter((member) => member.respuesta === "no");
+            const pendingMembers = memberRows.filter((member) => member.respuesta === "pendiente");
             const response = confirmedMembers.length === memberRows.length ? "si"
-                : noMembers.length === memberRows.length ? "no" : "pendiente";
+                : noMembers.length === memberRows.length ? "no"
+                : confirmedMembers.length || noMembers.length ? "mixta" : "pendiente";
             rows.push({
                 id,
                 nombre: String(guest.nombre || ""),
@@ -124,7 +126,9 @@ function buildRows(confirmations, guestDirectory) {
                 fechaConfirmacion: confirmedMembers.length ? Math.max(...confirmedMembers.map((member) => member.fechaConfirmacion || 0)) : null,
                 miembros: memberRows,
                 integrantes: memberRows.map((member) => member.nombre + " (" + member.pasesAsignados + " pase)"),
-                asistenciaConfirmada: confirmedMembers.map((member) => member.nombre + " (" + member.cantidadConfirmada + " pase)")
+                asistenciaConfirmada: confirmedMembers.map((member) => member.nombre + " (" + member.cantidadConfirmada + " pase)"),
+                noAsistiran: noMembers.map((member) => member.nombre + " (" + member.pasesAsignados + " pase)"),
+                pendientes: pendingMembers.map((member) => member.nombre + " (" + member.pasesAsignados + " pase)")
             });
             return;
         }
@@ -151,6 +155,7 @@ function buildRows(confirmations, guestDirectory) {
 
     confirmationById.forEach((confirmation, id) => {
         if (configuredIds.includes(id)) return;
+        if (configuredIds.some((groupId) => id.indexOf(groupId + "-member-") === 0)) return;
         rows.push(confirmation);
     });
 
@@ -199,6 +204,7 @@ function formatConfirmationDateParts(value) {
 function toResponseLabel(response) {
     if (response === "si") return "confirmado";
     if (response === "no") return "no asistirán";
+    if (response === "mixta") return "respuesta mixta";
     return "pendiente";
 }
 
@@ -230,7 +236,10 @@ function compareGuestIds(a, b) {
 
 function matchesActiveFilter(row, filter) {
     if (filter === "todos") return true;
-    return String(row && row.respuesta || "") === filter;
+    if (filter === "si") return Number(row && row.cantidadConfirmada) > 0;
+    if (filter === "no") return Array.isArray(row && row.noAsistiran) && row.noAsistiran.length > 0;
+    if (filter === "pendiente") return Array.isArray(row && row.pendientes) && row.pendientes.length > 0;
+    return false;
 }
 
 function applySearchAndFilter(rows, filter, searchTerm) {
@@ -261,7 +270,7 @@ function buildCsvContent(rows) {
     const lines = [headers.map(escapeCsvCell).join(",")];
 
     rows.forEach((row) => {
-        const responseValue = row.respuesta === "si" || row.respuesta === "no" ? row.respuesta : "pendiente";
+        const responseValue = ["si", "no", "mixta"].includes(row.respuesta) ? row.respuesta : "pendiente";
         const line = [
             row.nombre || "--",
             String(Number(row.pasesAsignados) || 0),
@@ -293,11 +302,10 @@ function downloadCsvFile(content, eventId) {
 function setSummaryValues(rows) {
     const totalGuests = rows.length;
     const totalYes = rows
-        .filter((row) => row && row.respuesta === "si")
+        .filter((row) => row && Number(row.cantidadConfirmada) > 0)
         .reduce((acc, row) => acc + (Number(row && row.cantidadConfirmada) || 0), 0);
     const totalNo = rows
-        .filter((row) => row && row.respuesta === "no")
-        .reduce((acc, row) => acc + (Number(row && row.pasesAsignados) || 0), 0);
+        .reduce((acc, row) => acc + (Array.isArray(row && row.noAsistiran) ? row.noAsistiran.length : (row && row.respuesta === "no" ? Number(row.pasesAsignados) || 0 : 0)), 0);
     const totalPending = rows
         .filter((row) => row && row.respuesta === "pendiente")
         .reduce((acc, row) => acc + (Number(row && row.pasesAsignados) || 0), 0);
@@ -345,7 +353,7 @@ function renderDesktopTable(rows, emptyMessage) {
 
         const responseTd = document.createElement("td");
         const badge = document.createElement("span");
-        const responseValue = row.respuesta === "si" || row.respuesta === "no" ? row.respuesta : "pendiente";
+        const responseValue = ["si", "no", "mixta"].includes(row.respuesta) ? row.respuesta : "pendiente";
         badge.className = "status-badge status-badge--" + responseValue;
         badge.textContent = toResponseLabel(responseValue);
         responseTd.appendChild(badge);
@@ -373,7 +381,7 @@ function renderDesktopTable(rows, emptyMessage) {
     });
 }
 
-function renderMobileCards(rows, emptyMessage) {
+function renderMobileCards(rows, emptyMessage, activeFilter) {
     const mobileList = document.getElementById("confirmations-mobile-list");
     if (!mobileList) return;
 
@@ -402,7 +410,7 @@ function renderMobileCards(rows, emptyMessage) {
         const statusWrap = document.createElement("div");
         statusWrap.className = "confirmation-card-status";
 
-        const responseValue = row.respuesta === "si" || row.respuesta === "no" ? row.respuesta : "pendiente";
+        const responseValue = ["si", "no", "mixta"].includes(row.respuesta) ? row.respuesta : "pendiente";
         const badge = document.createElement("span");
         badge.className = "status-badge status-badge--" + responseValue;
         badge.textContent = toResponseLabel(responseValue);
@@ -466,16 +474,31 @@ function renderMobileCards(rows, emptyMessage) {
             const attendanceValue = document.createElement("strong");
             attendanceValue.textContent = row.asistenciaConfirmada.length ? row.asistenciaConfirmada.join(", ") : "--";
             lineAttendance.append(attendanceLabel, attendanceValue);
-            details.append(lineMembers, lineAttendance);
+            if (activeFilter !== "no" && activeFilter !== "pendiente") details.append(lineAttendance);
+
+            function appendMemberStatus(labelText, values) {
+                if (!Array.isArray(values) || values.length === 0) return;
+                const line = document.createElement("div");
+                line.className = "confirmation-card-line confirmation-card-line--stacked";
+                const label = document.createElement("span");
+                label.textContent = labelText;
+                const value = document.createElement("strong");
+                value.textContent = values.join(", ");
+                line.append(label, value);
+                details.appendChild(line);
+            }
+
+            if (activeFilter === "todos" || activeFilter === "no") appendMemberStatus("No podrán asistir", row.noAsistiran);
+            if (activeFilter === "todos" || activeFilter === "pendiente") appendMemberStatus("Pendientes de Confirmar", row.pendientes);
         }
         card.append(nameEl, statusWrap, details);
         mobileList.appendChild(card);
     });
 }
 
-function renderTable(rows, emptyMessage) {
+function renderTable(rows, emptyMessage, activeFilter) {
     renderDesktopTable(rows, emptyMessage);
-    renderMobileCards(rows, emptyMessage);
+    renderMobileCards(rows, emptyMessage, activeFilter);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -509,7 +532,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getEffectiveGuestDirectory() {
         if (hasRemoteGuestSource) {
-            return Object.assign({}, fallbackGuestDirectory, remoteGuestDirectory);
+            const merged = Object.assign({}, fallbackGuestDirectory, remoteGuestDirectory);
+            Object.keys(fallbackGuestDirectory).forEach((id) => {
+                const fallbackGuest = fallbackGuestDirectory[id];
+                const remoteGuest = remoteGuestDirectory[id];
+                if (remoteGuest && (!Array.isArray(remoteGuest.miembros) || remoteGuest.miembros.length === 0)
+                    && Array.isArray(fallbackGuest.miembros) && fallbackGuest.miembros.length > 0) {
+                    merged[id] = Object.assign({}, remoteGuest, { miembros: fallbackGuest.miembros });
+                }
+            });
+            return merged;
         }
         return fallbackGuestDirectory;
     }
@@ -533,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const emptyMessage = hasControlsApplied
             ? "No hay coincidencias con la búsqueda o filtro seleccionado."
             : "No hay confirmaciones para mostrar.";
-        renderTable(sortedRows, emptyMessage);
+        renderTable(sortedRows, emptyMessage, activeFilter);
         if (exportButton) exportButton.disabled = visibleRows.length === 0;
     }
 

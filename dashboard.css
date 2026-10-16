@@ -333,6 +333,7 @@ body {
 }
 
 .table-wrapper {
+    display: none;
     overflow-x: auto;
     border: 1px solid rgba(107, 61, 61, 0.16);
     background: rgba(255, 255, 255, 0.7);
@@ -500,6 +501,12 @@ body {
     background: rgba(232, 213, 205, 0.62);
     border-color: rgba(139, 77, 77, 0.25);
     color: rgba(107, 61, 61, 0.93);
+}
+
+.status-badge--mixta {
+    color: #8a681f;
+    background: #fff8df;
+    border-color: #d5b35b;
 }
 
 .empty-state {

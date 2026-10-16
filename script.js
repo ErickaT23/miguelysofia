@@ -721,11 +721,18 @@ function initRSVP() {
             const status = item.querySelector('.rsvp-member-status');
 
             function setMemberState(response, locked) {
+                const actions = item.querySelector('.rsvp-member-actions');
                 buttons.forEach(function (button) {
                     button.classList.toggle('is-selected', button.dataset.response === response);
                     button.disabled = locked;
                 });
-                if (status) status.textContent = response === 'si' ? 'Confirmado' : 'No asistirá';
+                if (actions) actions.style.display = locked ? 'none' : '';
+                if (status) {
+                    status.className = 'rsvp-member-status ' + (response === 'si' ? 'is-confirmed' : 'is-declined');
+                    status.textContent = response === 'si'
+                        ? 'Gracias por acompañarnos, nos vemos pronto.'
+                        : 'Lamentamos que no podrás acompañarnos, vamos a extrañarte.';
+                }
             }
 
             getExistingConfirmation(memberId).then(function (record) {
