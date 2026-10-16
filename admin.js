@@ -1147,6 +1147,10 @@
 
         let resizeTick = null;
         state.resizeHandler = function () {
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+                return;
+            }
             if (resizeTick) {
                 window.cancelAnimationFrame(resizeTick);
             }
