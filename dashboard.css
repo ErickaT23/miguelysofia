@@ -340,7 +340,13 @@ body {
 }
 
 .confirmations-mobile-list {
-    display: none;
+    display: block;
+}
+
+.confirmation-card-line--stacked {
+    display: grid;
+    justify-content: initial;
+    gap: 0.18rem;
 }
 
 .confirmations-table {
@@ -683,13 +689,7 @@ body {
 }
 
 @media (max-width: 767px) {
-    .table-wrapper {
-        display: none;
-    }
-
-    .confirmations-mobile-list {
-        display: block;
-    }
+    .table-wrapper { display: none; }
 }
 
 @media (max-width: 560px) {
