@@ -1348,6 +1348,11 @@
             }
 
             state.db = db;
+            if (typeof db.migrateLocalGuestsToFirebase === "function") {
+                db.migrateLocalGuestsToFirebase(state.eventId).catch(function (error) {
+                    console.warn("No se pudo cargar la lista inicial de invitados:", error);
+                });
+            }
             subscribeData(db);
         } catch (error) {
             console.error(error);

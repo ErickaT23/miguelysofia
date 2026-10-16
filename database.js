@@ -376,8 +376,9 @@ function normalizeLocalGuestsSource(source) {
         return {
           id,
           nombre: String(guest.nombre || "").trim() || "Invitado",
-          pases: Math.max(1, Number(guest.pases) || 1),
-          activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
+           pases: Math.max(1, Number(guest.pases) || 1),
+           miembros: Array.isArray(guest.miembros) ? guest.miembros : [],
+           activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
         };
       })
       .filter(Boolean);
@@ -393,8 +394,9 @@ function normalizeLocalGuestsSource(source) {
         return {
           id,
           nombre: String(guest.nombre || "").trim() || "Invitado",
-          pases: Math.max(1, Number(guest.pases) || 1),
-          activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
+           pases: Math.max(1, Number(guest.pases) || 1),
+           miembros: Array.isArray(guest.miembros) ? guest.miembros : [],
+           activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
         };
       })
       .filter(Boolean);
@@ -410,6 +412,10 @@ function resolveLocalGuestsSource(eventId, explicitSource) {
 
   if (window.GuestConfig && window.GuestConfig.invitados) {
     return { source: window.GuestConfig.invitados, sourceLabel: "window.GuestConfig.invitados" };
+  }
+
+  if (window.config && window.config.invitados) {
+    return { source: window.config.invitados, sourceLabel: "window.config.invitados" };
   }
 
   const localSeeds = window.LocalGuestSeeds || window.DashboardGuestDirectoryByEvent;
@@ -978,10 +984,11 @@ async function migrateLocalGuestsToFirebase(arg1, arg2, arg3) {
       guests.map(function (guest) {
         const guestId = sanitizeFirebaseKey(guest.id);
         return set(ref(db, getEventInvitadosPath(eventId) + "/" + guestId), {
-          id: String(guest.id),
-          nombre: String(guest.nombre || "").trim(),
-          pases: Math.max(1, Number(guest.pases) || 1),
-          activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
+           id: String(guest.id),
+           nombre: String(guest.nombre || "").trim(),
+           pases: Math.max(1, Number(guest.pases) || 1),
+           miembros: Array.isArray(guest.miembros) ? guest.miembros : [],
+           activo: typeof guest.activo === "undefined" ? true : Boolean(guest.activo)
         });
       })
     );

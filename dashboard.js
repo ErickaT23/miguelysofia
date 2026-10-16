@@ -1,7 +1,32 @@
 import { subscribeToConfirmations, subscribeToInvitados } from "./database.js";
 
 const guestDirectorySeed = {
-    "1": { nombre: "María López", pases: 2 },
+    "1": { nombre: "FAMILIA FLORÍAN", pases: 4, miembros: [
+        { nombre: "HEIDY FLORIAN", pases: 1 },
+        { nombre: "ALEJANDRA RIVAS", pases: 1 },
+        { nombre: "GABRIELA MORALES", pases: 1 },
+        { nombre: "JUAN LUIS SÁNCHEZ", pases: 1 }
+    ] },
+    "13": { nombre: "FAMILIA PEREIRA MARQUEZ", pases: 4, miembros: [
+        { nombre: "LUIS PEREIRA", pases: 1 },
+        { nombre: "MIGUEL PEREIRA", pases: 1 },
+        { nombre: "WENDY DE PEREIRA", pases: 1 },
+        { nombre: "VALERIA PEREIRA", pases: 1 }
+    ] },
+    "15": { nombre: "FAMILIA VELIZ", pases: 3, miembros: [
+        { nombre: "MARIELOS VELIZ", pases: 1 },
+        { nombre: "DULCE VELIZ", pases: 1 },
+        { nombre: "ESMERALDA VELLIZ", pases: 1 }
+    ] },
+    "18": { nombre: "FAMILIA PENDIENTE", pases: 3, miembros: [
+        { nombre: "JORGE COLLADO", pases: 1 },
+        { nombre: "NICOLLE COLLADO", pases: 1 },
+        { nombre: "EVELYN DE COLLADO", pases: 1 }
+    ] },
+    "32": { nombre: "FAMILIA PENDIENTE", pases: 2, miembros: [
+        { nombre: "PABLO ZETINA", pases: 1 },
+        { nombre: "ESPOSA DE PABLO ZETINA", pases: 1 }
+    ] },
     "2": { nombre: "Carlos Méndez", pases: 4 },
     "3": { nombre: "Andrea Ruiz", pases: 1 },
     "4": { nombre: "Familia García", pases: 6 },
@@ -64,7 +89,8 @@ function mapInvitadosToDirectory(invitados) {
 
         directory[id] = {
             nombre: String(invitado.nombre || "").trim() || "Invitado",
-            pases: Math.max(0, Number(invitado.pases) || 0)
+            pases: Math.max(0, Number(invitado.pases) || 0),
+            miembros: Array.isArray(invitado.miembros) ? invitado.miembros : []
         };
     });
 
@@ -110,6 +136,36 @@ function buildRows(confirmations, guestDirectory) {
 
     configuredIds.forEach((id) => {
         const guest = localGuestDirectory[id];
+        const members = Array.isArray(guest.miembros) ? guest.miembros : [];
+        if (members.length > 0) {
+            const memberRows = members.map((member, index) => {
+                const memberId = id + "-member-" + (index + 1);
+                return confirmationById.get(memberId) || {
+                    id: memberId,
+                    nombre: String(member.nombre || ""),
+                    pasesAsignados: Math.max(0, Number(member.pases) || 1),
+                    respuesta: "pendiente",
+                    cantidadConfirmada: 0,
+                    fechaConfirmacion: null
+                };
+            });
+            const confirmedMembers = memberRows.filter((member) => member.respuesta === "si");
+            const noMembers = memberRows.filter((member) => member.respuesta === "no");
+            const response = confirmedMembers.length === memberRows.length ? "si"
+                : noMembers.length === memberRows.length ? "no" : "pendiente";
+            rows.push({
+                id,
+                nombre: String(guest.nombre || ""),
+                pasesAsignados: memberRows.reduce((total, member) => total + member.pasesAsignados, 0),
+                respuesta: response,
+                cantidadConfirmada: confirmedMembers.reduce((total, member) => total + member.cantidadConfirmada, 0),
+                fechaConfirmacion: confirmedMembers.length ? Math.max(...confirmedMembers.map((member) => member.fechaConfirmacion || 0)) : null,
+                miembros: memberRows,
+                integrantes: memberRows.map((member) => member.nombre + " (" + member.pasesAsignados + " pase)"),
+                asistenciaConfirmada: confirmedMembers.map((member) => member.nombre + " (" + member.cantidadConfirmada + " pase)")
+            });
+            return;
+        }
         const confirmation = confirmationById.get(id);
 
         if (!confirmation) {
@@ -284,7 +340,6 @@ function setSummaryValues(rows) {
         .filter((row) => row && row.respuesta === "pendiente")
         .reduce((acc, row) => acc + (Number(row && row.pasesAsignados) || 0), 0);
     const totalConfirmedPeople = rows
-        .filter((row) => row.respuesta === "si")
         .reduce((acc, row) => acc + (Number(row.cantidadConfirmada) || 0), 0);
 
     const totalGuestsEl = document.getElementById("summary-total-guests");
@@ -433,6 +488,24 @@ function renderMobileCards(rows, emptyMessage) {
         lineTime.append(timeLabel, timeValue);
 
         details.append(lineAssigned, lineConfirmed, lineDate, lineTime);
+        if (Array.isArray(row.integrantes)) {
+            const lineMembers = document.createElement("div");
+            lineMembers.className = "confirmation-card-line confirmation-card-line--stacked";
+            const membersLabel = document.createElement("span");
+            membersLabel.textContent = "Integrantes";
+            const membersValue = document.createElement("strong");
+            membersValue.textContent = row.integrantes.join(", ");
+            lineMembers.append(membersLabel, membersValue);
+
+            const lineAttendance = document.createElement("div");
+            lineAttendance.className = "confirmation-card-line confirmation-card-line--stacked";
+            const attendanceLabel = document.createElement("span");
+            attendanceLabel.textContent = "Asistencia confirmada";
+            const attendanceValue = document.createElement("strong");
+            attendanceValue.textContent = row.asistenciaConfirmada.length ? row.asistenciaConfirmada.join(", ") : "--";
+            lineAttendance.append(attendanceLabel, attendanceValue);
+            details.append(lineMembers, lineAttendance);
+        }
         card.append(nameEl, statusWrap, details);
         mobileList.appendChild(card);
     });
@@ -563,6 +636,18 @@ document.addEventListener("DOMContentLoaded", function () {
             const invitadosArray = Array.isArray(invitados) ? invitados : [];
             hasRemoteGuestSource = invitadosArray.length > 0;
             remoteGuestDirectory = mapInvitadosToDirectory(invitadosArray);
+            Object.keys(fallbackGuestDirectory).forEach((id) => {
+                const fallbackGuest = fallbackGuestDirectory[id];
+                const remoteGuest = remoteGuestDirectory[id];
+                if (!remoteGuest) return;
+                if (Array.isArray(fallbackGuest.miembros) && fallbackGuest.miembros.length && !remoteGuest.miembros.length) {
+                    remoteGuest.miembros = fallbackGuest.miembros;
+                }
+                if (id === "1") {
+                    remoteGuest.nombre = fallbackGuest.nombre;
+                    remoteGuest.pases = fallbackGuest.pases;
+                }
+            });
             refreshRowsFromSources();
         },
         function (error) {
