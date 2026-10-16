@@ -267,7 +267,12 @@ function applyFooterConfig() {
 // ============================================
 const GuestConfig = {
     invitados: {
-        "1": { nombre: "María López", pases: 2 },
+        "1": { nombre: "FAMILIA FLORÍAN", pases: 4, miembros: [
+            { nombre: "HEIDY FLORIAN", pases: 1 },
+            { nombre: "ALEJANDRA RIVAS", pases: 1 },
+            { nombre: "GABRIELA MORALES", pases: 1 },
+            { nombre: "JUAN LUIS SÁNCHEZ", pases: 1 }
+        ] },
         "2": { nombre: "Carlos Méndez", pases: 4 },
         "3": { nombre: "Andrea Ruiz", pases: 1 },
         "4": { nombre: "Familia García", pases: 6 },
@@ -305,6 +310,7 @@ const InvitadoApp = {
                 id: safeId,
                 nombre: String(invitado.nombre || ''),
                 pases: Math.max(1, Number(invitado.pases) || 1),
+                miembros: Array.isArray(invitado.miembros) ? invitado.miembros : [],
                 activo: true
             };
         }
@@ -312,7 +318,8 @@ const InvitadoApp = {
         return {
             id: safeId,
             nombre: String(GuestConfig.invitadoDefault.nombre || ''),
-            pases: Math.max(1, Number(GuestConfig.invitadoDefault.pases) || 1),
+                pases: Math.max(1, Number(GuestConfig.invitadoDefault.pases) || 1),
+                miembros: [],
             activo: true
         };
     },
@@ -326,10 +333,14 @@ const InvitadoApp = {
             const remoteGuest = await rsvpDB.getInvitadoById(eventId, guestId);
             if (!remoteGuest || typeof remoteGuest !== 'object') return null;
 
+            const localGuest = GuestConfig.invitados[guestId] || {};
             return {
                 id: String(remoteGuest.id || guestId || 'default'),
-                nombre: String(remoteGuest.nombre || '').trim() || String(GuestConfig.invitadoDefault.nombre || ''),
-                pases: Math.max(1, Number(remoteGuest.pases) || Number(GuestConfig.invitadoDefault.pases) || 1),
+                nombre: String(localGuest.nombre || remoteGuest.nombre || '').trim() || String(GuestConfig.invitadoDefault.nombre || ''),
+                pases: Math.max(1, Number(localGuest.pases) || Number(remoteGuest.pases) || Number(GuestConfig.invitadoDefault.pases) || 1),
+                miembros: Array.isArray(remoteGuest.miembros) && remoteGuest.miembros.length
+                    ? remoteGuest.miembros
+                    : (Array.isArray(localGuest.miembros) ? localGuest.miembros : []),
                 activo: typeof remoteGuest.activo === 'undefined' ? true : Boolean(remoteGuest.activo)
             };
         } catch (error) {
@@ -373,37 +384,24 @@ const InvitadoApp = {
 
     renderRSVP() {
         const nameInput = document.getElementById('rsvp-name');
-        const guestsWrapper = document.getElementById('guest-count-wrapper');
-        const guestsSelect = document.getElementById('guest-count');
-        const responseYes = document.getElementById('rsvp-response-yes');
-        const responseNo = document.getElementById('rsvp-response-no');
-        const totalPases = Math.max(1, Number(this.data && this.data.pases) || 1);
+        const membersEl = document.getElementById('rsvp-members');
 
         if (nameInput) {
-            nameInput.value = this.data.nombre;
+            nameInput.value = String(this.data.nombre || '').toUpperCase();
             nameInput.readOnly = true;
         }
-
-        if (guestsSelect) {
-            guestsSelect.replaceChildren();
-
-            for (let i = 1; i <= totalPases; i += 1) {
-                const option = document.createElement('option');
-                option.value = String(i);
-                option.textContent = i === 1 ? '1 invitado' : i + ' invitados';
-                guestsSelect.appendChild(option);
-            }
-
-            guestsSelect.value = String(totalPases);
-            guestsSelect.disabled = true;
-            guestsSelect.required = false;
-        }
-
-        if (guestsWrapper) {
-            guestsWrapper.style.display = 'none';
-        }
-        if (responseYes) responseYes.checked = false;
-        if (responseNo) responseNo.checked = false;
+        if (!membersEl) return;
+        const members = Array.isArray(this.data.miembros) && this.data.miembros.length
+            ? this.data.miembros : [{ nombre: this.data.nombre, pases: this.data.pases }];
+        membersEl.replaceChildren(...members.map((member, index) => {
+            const item = document.createElement('div');
+            item.className = 'rsvp-member-item';
+            item.dataset.memberId = 'member-' + (index + 1);
+            item.innerHTML = '<div class="rsvp-member-copy"><strong></strong><span></span></div><div class="rsvp-member-actions"><button type="button" class="rsvp-member-choice" data-response="si">Asistiré</button><button type="button" class="rsvp-member-choice" data-response="no">No asistiré</button></div><span class="rsvp-member-status"></span>';
+            item.querySelector('strong').textContent = String(member.nombre || '').toUpperCase();
+            item.querySelector('span').textContent = (Number(member.pases) || 1) + ' pase asignado';
+            return item;
+        }));
     },
 
     getData() {
@@ -722,6 +720,57 @@ function initRSVP() {
     const confirmedIntroText = 'Gracias por haber completado el formulario de asistencia.';
     
     if (!form) return;
+
+    const membersEl = document.getElementById('rsvp-members');
+    if (membersEl) {
+        const groupData = InvitadoApp.getData() || {};
+        const groupId = String(groupData.id || 'default');
+        const memberItems = Array.from(membersEl.querySelectorAll('.rsvp-member-item'));
+        memberItems.forEach(function (item) {
+            const memberId = groupId + '-' + item.dataset.memberId;
+            const buttons = item.querySelectorAll('.rsvp-member-choice');
+            const status = item.querySelector('.rsvp-member-status');
+
+            function setMemberState(response, locked) {
+                buttons.forEach(function (button) {
+                    button.classList.toggle('is-selected', button.dataset.response === response);
+                    button.disabled = locked;
+                });
+                if (status) status.textContent = response === 'si' ? 'Confirmado' : 'No asistirá';
+            }
+
+            getExistingConfirmation(memberId).then(function (record) {
+                if (record && record.confirmado) setMemberState(record.respuesta, true);
+            }).catch(function () {});
+
+            buttons.forEach(function (button) {
+                button.addEventListener('click', async function () {
+                    if (button.disabled) return;
+                    buttons.forEach(function (control) { control.disabled = true; });
+                    try {
+                        const saved = await saveConfirmation({
+                            id: memberId,
+                            nombre: item.querySelector('strong').textContent,
+                            pasesAsignados: 1,
+                            respuesta: button.dataset.response,
+                            cantidadConfirmada: button.dataset.response === 'si' ? 1 : 0,
+                            confirmado: true,
+                            fechaConfirmacion: Date.now()
+                        });
+                        setMemberState(saved.respuesta, true);
+                    } catch (error) {
+                        if (error && error.code === 'RSVP_ALREADY_CONFIRMED' && error.existingData) {
+                            setMemberState(error.existingData.respuesta, true);
+                        } else {
+                            buttons.forEach(function (control) { control.disabled = false; });
+                            showPopup('No pudimos guardar tu confirmación. Intenta nuevamente.', true);
+                        }
+                    }
+                });
+            });
+        });
+        return;
+    }
 
     function getSelectedResponse() {
         if (responseYes && responseYes.checked) return 'si';

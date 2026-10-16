@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&amp;family=Jost:wght@300;400;500&amp;family=Playfair:ital,wght@1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Pinyon+Script&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
-    <link rel="stylesheet" href="styles.css?v=20261015">
+    <link rel="stylesheet" href="styles.css?v=20261018">
 </head>
 <body>
     <!-- PORTADA -->
@@ -402,37 +402,14 @@
 
                     <form id="rsvp-form" class="rsvp-form" novalidate>
                         <div class="form-group">
-                            <label for="rsvp-name">Nombre del invitado</label>
+                            <label for="rsvp-name">Nombre</label>
                             <input type="text" id="rsvp-name" name="name" value="Nombre del Invitado" readonly>
                         </div>
 
                         <div class="form-group">
-                            <p class="rsvp-label">Asistirás</p>
-                            <div class="rsvp-response-group">
-                                <label class="rsvp-radio-option" for="rsvp-response-yes">
-                                    <input type="radio" id="rsvp-response-yes" name="attendance" value="yes">
-                                    <span>Sí, con mucho gusto</span>
-                                </label>
-                                <label class="rsvp-radio-option" for="rsvp-response-no">
-                                    <input type="radio" id="rsvp-response-no" name="attendance" value="no">
-                                    <span>No, lamentablemente no podré</span>
-                                </label>
-                            </div>
+                            <p class="rsvp-label">¿Quiénes asistirán?</p>
+                            <div id="rsvp-members" class="rsvp-members"></div>
                         </div>
-
-                        <div class="form-group" id="guest-count-wrapper" style="display: none;">
-                            <label for="guest-count">Número de invitados</label>
-                            <select id="guest-count" name="guests">
-                                <option value="1">1 invitado</option>
-                                <option value="2">2 invitados</option>
-                                <option value="3">3 invitados</option>
-                                <option value="4">4 invitados</option>
-                                <option value="5">5 invitados</option>
-                                <option value="6">6 invitados</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn-rsvp" id="rsvp-submit">Confirmar asistencia</button>
                     </form>
 
                     <div id="rsvp-success" class="rsvp-success rsvp-final-container" style="display: none;">
@@ -518,8 +495,8 @@
         </button>
     </div>
 
-    <script src="config.js?v=20261012"></script>
-    <script src="script.js?v=20261015"></script>
-    <script type="module" src="database.js?v=20261012"></script>
+    <script src="config.js?v=20261018"></script>
+    <script src="script.js?v=20261018"></script>
+    <script type="module" src="database.js?v=20261018"></script>
 </body>
 </html>

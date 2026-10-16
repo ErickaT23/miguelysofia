@@ -3103,6 +3103,95 @@ button {
     gap: 0.68rem;
 }
 
+.rsvp-members {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.rsvp-member-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid rgba(11, 82, 61, 0.2);
+    border-radius: 0.5rem;
+}
+
+.rsvp-member-copy {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.gifts-style-section .rsvp-member-copy strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.55;
+    background: linear-gradient(115deg, #063b2c 0%, #0b523d 24%, #4a9a78 43%, #12382d 55%, #2f8065 74%, #063b2c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gifts-style-section .rsvp-member-copy span {
+    font-family: var(--font-editorial);
+    font-size: 15px;
+    background: linear-gradient(115deg, #8c6424 0%, #e1bd68 25%, #fff0ad 45%, #a87528 62%, #f0d27b 80%, #8c6424 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rsvp-member-status {
+    font-size: 0.8rem;
+}
+
+.rsvp-member-actions {
+    display: flex;
+    gap: 0.45rem;
+}
+
+.gifts-style-section .rsvp-member-choice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.72rem 1.9rem;
+    background: var(--color-corinto);
+    color: var(--color-white);
+    border: 1px solid rgba(107, 61, 61, 0.2);
+    border-radius: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.gifts-style-section .rsvp-member-choice:hover {
+    background: var(--color-corinto-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(44, 36, 36, 0.18);
+}
+
+.gifts-style-section .rsvp-member-choice.is-selected {
+    color: var(--color-white);
+    background: var(--color-corinto-dark);
+}
+
+@media (max-width: 600px) {
+    .rsvp-member-item {
+        grid-template-columns: 1fr;
+    }
+    .rsvp-member-actions {
+        justify-content: stretch;
+    }
+    .rsvp-member-choice {
+        flex: 1;
+    }
+}
+
 .rsvp-radio-option {
     display: grid;
     grid-template-columns: 16px 1fr;
