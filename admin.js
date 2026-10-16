@@ -398,6 +398,7 @@
         state.editDraft = {
             nombre: String(row.nombre || "").trim(),
             pases: Math.max(1, Number(row.pasesAsignados) || 1),
+            miembros: Array.isArray(row.miembros) ? row.miembros : [],
             activo: row.activo !== false
         };
         refreshView();
@@ -407,6 +408,24 @@
         state.editingGuestId = null;
         state.editDraft = null;
         refreshView();
+    }
+
+    function appendMembersEditor(container, draft) {
+        const input = document.createElement("textarea");
+        input.className = "inline-members-input";
+        input.rows = 3;
+        input.placeholder = "Un integrante por línea";
+        input.value = (Array.isArray(draft.miembros) ? draft.miembros : [])
+            .map(function (member) { return member.nombre || ""; })
+            .join("\n");
+        input.addEventListener("input", function () {
+            if (!state.editDraft) return;
+            state.editDraft.miembros = input.value.split(/\r?\n/)
+                .map(function (name) { return name.trim(); })
+                .filter(Boolean)
+                .map(function (name) { return { nombre: name, pases: 1 }; });
+        });
+        container.appendChild(input);
     }
 
     async function saveInlineEdit(row) {
@@ -435,6 +454,7 @@
                 id: row.id,
                 nombre,
                 pases,
+                miembros: Array.isArray(draft.miembros) ? draft.miembros : [],
                 activo
             });
 
@@ -601,6 +621,7 @@
                 id,
                 nombre: String(invitado.nombre || "").trim() || "Invitado",
                 pases: Math.max(0, Number(invitado.pases) || 0),
+                miembros: Array.isArray(invitado.miembros) ? invitado.miembros : [],
                 activo: typeof invitado.activo === "undefined" ? true : Boolean(invitado.activo)
             });
         });
@@ -637,6 +658,7 @@
                     respuesta: "pendiente",
                     cantidadConfirmada: 0,
                     fechaConfirmacion: null,
+                    miembros: Array.isArray(guest.miembros) ? guest.miembros : [],
                     activo: guest.activo,
                     canEdit: guest.activo !== false,
                     canReactivate: guest.activo === false
@@ -648,6 +670,7 @@
                 ...confirmation,
                 nombre: confirmation.nombre || guest.nombre,
                 pasesAsignados: confirmation.pasesAsignados || guest.pases,
+                miembros: Array.isArray(guest.miembros) ? guest.miembros : [],
                 activo: guest.activo,
                 canEdit: guest.activo !== false,
                 canReactivate: guest.activo === false
@@ -926,6 +949,7 @@
                     state.editDraft.nombre = nameInput.value;
                 });
                 tdNombre.appendChild(nameInput);
+                appendMembersEditor(tdNombre, draft);
             } else {
                 const nameMain = document.createElement("div");
                 nameMain.className = "guest-name-main";
@@ -1025,6 +1049,7 @@
                     state.editDraft.nombre = nameInput.value;
                 });
                 nameEl.appendChild(nameInput);
+                appendMembersEditor(nameEl, draft);
             } else {
                 nameEl.textContent = row.nombre || "--";
             }
@@ -1177,11 +1202,13 @@
 
         if (!state.db || typeof state.db.createInvitado !== "function") {
             setInviteFormMessage("No se pudo inicializar el guardado de invitados.", true);
+            setStatus("Firebase no está listo para crear invitados.", true);
             return;
         }
 
         const nameInput = getEl("invite-name");
         const pasesInput = getEl("invite-pases");
+        const membersInput = getEl("invite-members");
         const activeInput = getEl("invite-active");
         const saveBtn = getEl("btn-save-invite");
 
@@ -1223,6 +1250,7 @@
         } catch (error) {
             console.error("Error al guardar invitado:", error);
             setInviteFormMessage("No se pudo guardar el invitado.", true);
+            setStatus("No se pudo guardar el invitado en Firebase.", true);
         } finally {
             if (saveBtn) saveBtn.disabled = false;
         }
