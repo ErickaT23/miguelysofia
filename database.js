@@ -862,6 +862,7 @@ async function createInvitado(arg1, arg2) {
     id,
     nombre,
     pases,
+    miembros: Array.isArray(payload.miembros) ? payload.miembros : [],
     activo
   };
 
@@ -891,6 +892,7 @@ async function updateInvitado(arg1, arg2, arg3) {
     id: guestId,
     nombre,
     pases,
+    miembros: Array.isArray(payload.miembros) ? payload.miembros : [],
     activo
   };
 
@@ -919,6 +921,7 @@ async function deleteInvitado(arg1, arg2) {
     id: String(current.id || guestId),
     nombre: sanitizeText(current.nombre) || "Invitado",
     pases: Math.max(1, Number(current.pases) || 1),
+    miembros: Array.isArray(current.miembros) ? current.miembros : [],
     activo: false
   };
 

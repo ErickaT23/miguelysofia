@@ -1,45 +1,7 @@
 import { subscribeToConfirmations, subscribeToInvitados } from "./database.js";
 
-const guestDirectorySeed = {
-    "1": { nombre: "FAMILIA FLORÍAN", pases: 4, miembros: [
-        { nombre: "HEIDY FLORIAN", pases: 1 },
-        { nombre: "ALEJANDRA RIVAS", pases: 1 },
-        { nombre: "GABRIELA MORALES", pases: 1 },
-        { nombre: "JUAN LUIS SÁNCHEZ", pases: 1 }
-    ] },
-    "13": { nombre: "FAMILIA PEREIRA MARQUEZ", pases: 4, miembros: [
-        { nombre: "LUIS PEREIRA", pases: 1 },
-        { nombre: "MIGUEL PEREIRA", pases: 1 },
-        { nombre: "WENDY DE PEREIRA", pases: 1 },
-        { nombre: "VALERIA PEREIRA", pases: 1 }
-    ] },
-    "15": { nombre: "FAMILIA VELIZ", pases: 3, miembros: [
-        { nombre: "MARIELOS VELIZ", pases: 1 },
-        { nombre: "DULCE VELIZ", pases: 1 },
-        { nombre: "ESMERALDA VELLIZ", pases: 1 }
-    ] },
-    "18": { nombre: "FAMILIA PENDIENTE", pases: 3, miembros: [
-        { nombre: "JORGE COLLADO", pases: 1 },
-        { nombre: "NICOLLE COLLADO", pases: 1 },
-        { nombre: "EVELYN DE COLLADO", pases: 1 }
-    ] },
-    "32": { nombre: "FAMILIA PENDIENTE", pases: 2, miembros: [
-        { nombre: "PABLO ZETINA", pases: 1 },
-        { nombre: "ESPOSA DE PABLO ZETINA", pases: 1 }
-    ] },
-    "2": { nombre: "Carlos Méndez", pases: 4 },
-    "3": { nombre: "Andrea Ruiz", pases: 1 },
-    "4": { nombre: "Familia García", pases: 6 },
-    "5": { nombre: "Pedro Sánchez", pases: 2 }
-};
-
 const guestDirectoriesByEvent = {
-    "miguel-sofia-2026": guestDirectorySeed
-};
-
-window.LocalGuestSeeds = {
-    ...(window.LocalGuestSeeds || {}),
-    ...guestDirectoriesByEvent
+    "miguel-sofia-2026": (window.config && window.config.invitados) || {}
 };
 
 const VALID_FILTERS = new Set(["todos", "si", "no", "pendiente"]);
@@ -546,7 +508,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getEffectiveGuestDirectory() {
-        if (hasRemoteGuestSource) return remoteGuestDirectory;
+        if (hasRemoteGuestSource) {
+            return Object.assign({}, fallbackGuestDirectory, remoteGuestDirectory);
+        }
         return fallbackGuestDirectory;
     }
 

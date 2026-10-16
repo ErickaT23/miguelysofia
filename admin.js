@@ -1348,9 +1348,21 @@
             }
 
             state.db = db;
-            if (typeof db.migrateLocalGuestsToFirebase === "function") {
-                db.migrateLocalGuestsToFirebase(state.eventId).catch(function (error) {
-                    console.warn("No se pudo cargar la lista inicial de invitados:", error);
+            if (typeof db.migrateLocalGuestsToFirebase === "function"
+                && typeof db.getInvitados === "function"
+                && window.config && window.config.invitados) {
+                db.getInvitados(state.eventId).then(function (remoteGuests) {
+                    const expectedCount = Object.keys(window.config.invitados).length;
+                    if (remoteGuests.length < expectedCount) {
+                        return db.migrateLocalGuestsToFirebase(
+                            state.eventId,
+                            window.config.invitados,
+                            { force: true }
+                        );
+                    }
+                    return null;
+                }).catch(function (error) {
+                    console.warn("No se pudo completar la lista inicial de invitados:", error);
                 });
             }
             subscribeData(db);
