@@ -20,6 +20,11 @@
         return document.getElementById(id);
     }
 
+    function getConfiguredGuestName(id) {
+        const guest = window.config && window.config.invitados && window.config.invitados[String(id)];
+        return guest && String(guest.nombre || "").trim();
+    }
+
     function getQueryParams() {
         const params = new URLSearchParams(window.location.search || "");
         return {
@@ -619,7 +624,7 @@
 
             map.set(id, {
                 id,
-                nombre: String(invitado.nombre || "").trim() || "Invitado",
+                nombre: getConfiguredGuestName(id) || String(invitado.nombre || "").trim() || "Invitado",
                 pases: Math.max(0, Number(invitado.pases) || 0),
                 miembros: Array.isArray(invitado.miembros) ? invitado.miembros : [],
                 activo: typeof invitado.activo === "undefined" ? true : Boolean(invitado.activo)

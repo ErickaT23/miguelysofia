@@ -35,6 +35,11 @@ function getGuestDirectoryForEvent(eventId) {
     return guestDirectoriesByEvent[eventId] || {};
 }
 
+function getConfiguredGuestName(id) {
+    const guest = window.config && window.config.invitados && window.config.invitados[String(id)];
+    return guest && String(guest.nombre || "").trim();
+}
+
 function mapInvitadosToDirectory(invitados) {
     const directory = {};
 
@@ -50,7 +55,7 @@ function mapInvitadosToDirectory(invitados) {
         if (!id || !activo) return;
 
         directory[id] = {
-            nombre: String(invitado.nombre || "").trim() || "Invitado",
+            nombre: getConfiguredGuestName(id) || String(invitado.nombre || "").trim() || "Invitado",
             pases: Math.max(0, Number(invitado.pases) || 0),
             miembros: Array.isArray(invitado.miembros) ? invitado.miembros : []
         };
