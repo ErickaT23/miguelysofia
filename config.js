@@ -16,6 +16,10 @@ const nombresGrupos = [
 guestRows.forEach(([id, nombre], index) => {
     if (nombresGrupos[index]) guestRows[index][1] = nombresGrupos[index];
 });
+guestRows.forEach((row) => {
+    row[1] = row[1].replace(/FLOR[IÍ]AN/gi, (value) => value === value.toUpperCase() ? "FLORIÁN" : "Florián");
+    row[2] = row[2].map((nombre) => nombre.replace(/FLOR[IÍ]AN/gi, (value) => value === value.toUpperCase() ? "FLORIÁN" : "Florián"));
+});
 const invitados = Object.fromEntries(guestRows.map(([id, nombre, miembros]) => [String(id), { nombre, pases: miembros.length, miembros: miembros.map(nombre => ({ nombre, pases: 1 })) }]));
 const config = {
     invitados,
