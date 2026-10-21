@@ -55,7 +55,7 @@ function mapInvitadosToDirectory(invitados) {
         if (!id || !activo) return;
 
         directory[id] = {
-            nombre: getConfiguredGuestName(id) || String(invitado.nombre || "").trim() || "Invitado",
+            nombre: String(invitado.nombre || "").trim() || getConfiguredGuestName(id) || "Invitado",
             pases: Math.max(0, Number(invitado.pases) || 0),
             miembros: Array.isArray(invitado.miembros) ? invitado.miembros : []
         };
@@ -643,10 +643,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!remoteGuest) return;
                 if (Array.isArray(fallbackGuest.miembros) && fallbackGuest.miembros.length && !remoteGuest.miembros.length) {
                     remoteGuest.miembros = fallbackGuest.miembros;
-                }
-                if (id === "1") {
-                    remoteGuest.nombre = fallbackGuest.nombre;
-                    remoteGuest.pases = fallbackGuest.pases;
                 }
             });
             refreshRowsFromSources();

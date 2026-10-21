@@ -325,8 +325,8 @@ const InvitadoApp = {
             const localGuest = GuestConfig.invitados[guestId] || {};
             return {
                 id: String(remoteGuest.id || guestId || 'default'),
-                nombre: String(localGuest.nombre || remoteGuest.nombre || '').trim() || String(GuestConfig.invitadoDefault.nombre || ''),
-                pases: Math.max(1, Number(localGuest.pases) || Number(remoteGuest.pases) || Number(GuestConfig.invitadoDefault.pases) || 1),
+                nombre: String(remoteGuest.nombre || localGuest.nombre || '').trim() || String(GuestConfig.invitadoDefault.nombre || ''),
+                pases: Math.max(1, Number(remoteGuest.pases) || Number(localGuest.pases) || Number(GuestConfig.invitadoDefault.pases) || 1),
                 miembros: Array.isArray(remoteGuest.miembros) && remoteGuest.miembros.length
                     ? remoteGuest.miembros
                     : (Array.isArray(localGuest.miembros) ? localGuest.miembros : []),

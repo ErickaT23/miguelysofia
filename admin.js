@@ -624,7 +624,7 @@
 
             map.set(id, {
                 id,
-                nombre: getConfiguredGuestName(id) || String(invitado.nombre || "").trim() || "Invitado",
+                nombre: String(invitado.nombre || "").trim() || getConfiguredGuestName(id) || "Invitado",
                 pases: Math.max(0, Number(invitado.pases) || 0),
                 miembros: Array.isArray(invitado.miembros) ? invitado.miembros : [],
                 activo: typeof invitado.activo === "undefined" ? true : Boolean(invitado.activo)
